@@ -3,30 +3,30 @@ package main
 import "fmt"
 
 func main() {
-    accountHolder := "Roger"
-    accountNum := 1001
-    balance := 15000
+    account := Account{
+        Holder: "Roger",
+        Number: 1001,
+        Balance: 15000,
+    }
 
-    fmt.Printf("Account holder: %s\n", accountHolder)
-    fmt.Printf("Account number: %d\n", accountNum)
-    fmt.Printf("Original Balance: %d cents\n", balance)
+    fmt.Printf("Account holder: %s\n", account.Holder)
+    fmt.Printf("Account number: %d\n", account.Number)
+    fmt.Printf("Original Balance: %d cents\n", account.Balance)
     
-    newBalance, err := withdrawal(balance, 5000)
+    newBalance, err := withdrawal(account.Balance, 5000)
     
     if err != nil {
         fmt.Println("Error:", err)
     } else {
-        fmt.Printf("Withdrawal successful! New balance: %d cents\n", newBalance)
+        account.Balance = newBalance
+        fmt.Printf("Withdrawal successful!\nUpdated balance: %d cents\n", account.Balance)
     }
-    
+}
 
-    newBalance, err = withdrawal(balance, 20000)
-
-    if err != nil {
-        fmt.Println("Error:", err)
-    } else {
-        fmt.Printf("Withdrawal successful! New balance: %d cents\n", newBalance)    
-    }
+type Account struct {
+    Holder string
+    Number int
+    Balance int
 }
 
 
