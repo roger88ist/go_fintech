@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 func main() {
 	account := Account{
@@ -13,14 +16,31 @@ func main() {
 	fmt.Printf("Account number: %d\n", account.Number)
 	fmt.Printf("Original Balance: %d cents\n", account.Balance)
 
-	newBalance, err := withdrawal(account.Balance, 5000)
+	err := account.Withdraw(5000)
 
 	if err != nil {
 		fmt.Println("Error:", err)
 	} else {
-		account.Balance = newBalance
-		fmt.Printf("Withdrawal successful!\nUpdated balance: %d cents\n", account.Balance)
+		fmt.Printf("Withdrawal successful! Balance: %d cents\n", account.Balance)
 	}
+
+	err = account.Withdraw(20000)
+
+	if err != nil {
+		fmt.Println("Error:", err)
+	} else {
+		fmt.Printf("Withdrawal successful! Balance: %d cents\n", account.Balance)
+	}
+
+	err = account.Withdraw(-500)
+
+	if err != nil {
+		fmt.Println("Error:", err)
+	} else {
+		fmt.Printf("Withdrawal successful! Balance: %d cents\n", account.Balance)
+	}
+
+	fmt.Printf("Final balance: %d cents\n", account.Balance)
 }
 
 type Account struct {
@@ -29,20 +49,15 @@ type Account struct {
 	Balance int
 }
 
-func deposit(balance, amount int) int {
-	// since both params are same type just specify once
-	// return type doesn't need parensthesis on single type
-	return balance + amount
-}
-
-func withdrawal(balance, amount int) (int, error) {
+func (a *Account) Withdraw(amount int) error {
 	if amount <= 0 {
-		return balance, fmt.Errorf("invalid withdrawal amount")
+		return errors.New("invalid withdrawal amount")
 	}
 
-	if amount > balance {
-		return balance, fmt.Errorf("insufficient funds")
+	if amount > a.Balance {
+		return errors.New("insufficient funds")
 	}
 
-	return balance - amount, nil
+	a.Balance -= amount
+	return nil
 }
