@@ -12,9 +12,7 @@ func main() {
 		Balance: 15000,
 	}
 
-	fmt.Printf("Account holder: %s\n", account.Holder)
-	fmt.Printf("Account number: %d\n", account.Number)
-	fmt.Printf("Original Balance: %d cents\n", account.Balance)
+    displayAccount(account)
 
 	err := account.Withdraw(5000)
 
@@ -60,4 +58,18 @@ func (a *Account) Withdraw(amount int) error {
 
 	a.Balance -= amount
 	return nil
+}
+
+func (a Account) PrintInfo() {
+    fmt.Printf("Account holder: %s\n", a.Holder)
+    fmt.Printf("Account number: %d\n", a.Number)
+    fmt.Printf("Account Balance: %d cents\n", a.Balance)
+}
+
+type AccountPrinter interface {
+    PrintInfo()
+}
+
+func displayAccount(a AccountPrinter) {
+    a.PrintInfo()
 }
